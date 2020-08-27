@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script> 
+<title>Covid-19 Update</title>
+<style>
+    *{ 
+    margin: 0; 
+    padding: 0; 
+    font-family: sans-serif; 
+} 
+
+#inner-container {
+    height: 100vh;
+    box-sizing: border-box;  
+    background-color: rgb(198, 198, 248);
+    margin: 0% auto;
+    border: 1px solid;
+    padding: 10px;
+    } 
+#inner-container div { 
+    margin-bottom: 10px;
+    } 
+#inner-container select { 
+    width: 100%; 
+    padding: 10px; 
+    } 
+#inner-container td { 
+    padding: 10px; 
+    border: 1px solid; 
+    }
+
+h5,h4{
+    text-align:right ;
+}
+</style>
+</head> 
+<body> 
+<div id="container"> 
+   <div id="inner-container"> 
+        <form id="form"> 
+        <div> 
+        <select name="desh" id="desh"> 
+        <option disabled selected>Choose Countries</option> 
+        </select> 
+   </div> 
+    <div id="head"> </div> 
+<table width='100%' id="report"> 
+
+</table> 
+</form> 
+    <h5>Made by Prafull Epili</h5>
+    <h4 style="text-align:center;">If you like this pls ^</h4>
+</div> 
+</div> 
+<script>
+    $(document).ready(function (){   $.ajax({url:"https://api.covid19api.com/summary",type: "GET", 
+ success: function (data){ 
+ $.each(data.Countries,function(key,value){ if (key == 76) { 
+     var s = "selected"; 
+     } else { s = "";} 
+     
+ $("#desh").append("<option " + s + " id='" + key + "' value='" + key + "'>" + value.Country + " (" + data.Countries[key].CountryCode + ") " + "</option>")});
+ load(); 
+} 
+     })
+     function load() { 
+     $("#report,#head").html("");
+     var selected = $("#desh").val();
+     $.ajax({ 
+     url: "https://api.covid19api.com/summary",
+     type: "GET", 
+     success:function(data){
+     
+     $("#head").append("<h1>"+ data.Countries[selected].Country+"</h1><h4>Last Update : "+data.Countries[selected].Date + "</h4>");
+     
+     $("#report").append( 
+     "<tr><td> <h3>New Confirmed</h3></td> <td><h3>"+ data.Countries[selected].NewConfirmed + "</h3></td></tr><tr> <td> <h3>New Deaths</h3></td> <td><h3>" + data.Countries[selected].NewDeaths + "</h3></td></tr><tr><td><h3>New Recovered</h3></td> <td><h3>" + data.Countries[selected].NewRecovered + "</h3></td></tr></tr><tr> <td> <h3>Total Confirmed</h3></td> <td><h3>" + data.Countries[selected].TotalConfirmed + "</h3></td></tr><tr> <td style='background-color: red'> <h3>Total Deaths</h3></td> <td style='color:red'><h3>" + data.Countries[selected].TotalDeaths + "</h3></td></tr><tr> <td style='background-color: green'> <h3>Total Recovered</h3></td> <td style='color: green'><h3>" + data.Countries[selected].TotalRecovered + "</h3></td></tr>" ); 
+     } 
+   }); 
+} 
+ $("#desh").change(function (){
+    load(); 
+    });
+});
+
+
+
+</script>
+      </body>
+       </html>
